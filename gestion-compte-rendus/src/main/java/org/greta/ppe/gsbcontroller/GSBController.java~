@@ -1,0 +1,74 @@
+/**
+ * File name : GSBController.java
+ * @author Renaud Tripathi
+ * 
+ * A unique controller to rule them all.
+ * */
+
+ package org.greta.ppe.gsbcontroller;
+
+ import java.lang.reflect.*;
+ import java.util.Vector;
+ 
+ import org.greta.ppe.gsbview.*; // full require
+ import gsbmodel.*; // full require
+ import gsbpack.*;
+
+public class GSBController {
+
+	private GSBStatus status;
+	private GSBView view;
+
+	public GSBController() {
+		this.status = GSBStatus.TEST;
+	}
+
+	/**
+	 * State transition function
+	 * */
+	public void live(){
+		switch(this.status){
+			case TEST:
+				GSBTestModel model = new GSBTestModel(this);
+				for(GSBTestResult res : model.rTest()){
+					System.out.println(res);
+				}
+//				this.view = new GSBTestView(this,this.model);
+//				this.status = GSBStatus.F;
+				break;
+			case INIT:
+			case QA:
+			case QB:
+			case QC:
+			case F:
+			default:
+			break;
+		}
+	}
+
+	/**
+	 * Check if the controller is in final state
+	 * @return Boolean
+	 * */
+	public boolean alive(){
+		return this.status != GSBStatus.F;
+	}
+
+	/**
+	 * View bridge
+	 * Fill the receiver coantainer
+	 * @param data The data pack send by the view.
+	 * */
+	public void recv(GSBData data){
+		System.out.println(data);
+	}
+
+	/**
+	 * Instanciate a view and a model
+	 * according with status and previous message
+	 * @return void
+	 * */
+	private void loadAssets(){
+		// FSM stuff here base on self.status and view value.
+	}
+}
